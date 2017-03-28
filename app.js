@@ -8,6 +8,7 @@ const sessions = require('express-session');
 
 var routes = require('./routes/index');
 var tweets = require('./routes/tweets');
+var cassandra = require('./routes/cassandra');
 
 const config = require('./config');
 
@@ -37,6 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/tweets', tweets);
+app.use('/cassandra', cassandra);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
