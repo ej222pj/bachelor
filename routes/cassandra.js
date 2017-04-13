@@ -188,22 +188,46 @@ var fourteenthMethod = function (someStuff) {
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-
     firstMethod()
-    //.then(secondMethod).then(thirdMethod);
-    /*RunTenTimes(1);
-    RunTenTimes(2);
-    RunTenTimes(3);
-    RunTenTimes(4);
-    RunTenTimes(5);
-    RunTenTimes(6);
-    RunTenTimes(7);
-    RunTenTimes(8);
-    RunTenTimes(9);
-    RunTenTimes(10); 
-*/
     res.send("Cassandra");
+});
 
+router.get('/insert', function (req, res, next) {
+     tweet.findTenK().then(function (tweets) {
+        var startTime = new Date();
+        for (i = 0; i < 10000; i++) {
+            var query = 'INSERT INTO Tweets_fact (id, created_at, description, favourite_count, geo, in_reply_to_screen_name, in_reply_to_status_id, in_reply_to_status_id_str, lang, location, place, retweet_count, screen_name, source, text, time_zone, user_created_at, utc_offset) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+            var params = [i,
+                tweets[i].tweet.created_at,
+                tweets[i].tweet.user.description,
+                tweets[i].tweet.favorite_count,
+                null,
+                tweets[i].tweet.in_reply_to_screen_name,
+                tweets[i].tweet.in_reply_to_status_id,
+                tweets[i].tweet.in_reply_to_status_id_str,
+                tweets[i].tweet.lang,
+                tweets[i].tweet.user.location,
+                null,
+                tweets[i].tweet.retweet_count,
+                tweets[i].tweet.user.screen_name,
+                tweets[i].tweet.source,
+                tweets[i].tweet.text,
+                tweets[i].tweet.user.time_zone,
+                tweets[i].tweet.user.created_at,
+                tweets[i].tweet.user.utc_offset,
+            ];
+            connection.execute(query, params, { prepare: true }, function (err) {
+                if (err) {
+                    throw err;
+                }
+                else {
+                }
+            });
+        }
+        var endTime = new Date();
+        console.log("Insert alot was done in " + (endTime - startTime) + " milliseconds")
+    });
+    res.send("Inserted 10k");
 });
 
 router.get('/cleardb', function (req, res, next) {
