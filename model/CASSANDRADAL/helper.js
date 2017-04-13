@@ -1,27 +1,19 @@
 'use strict';
 
-const mongoose = require('mongoose');
+const cassandra = require("cassandra-driver");
 
 const initialize = () => {
-  const db = mongoose.connection;
-
-  db.on('error', function (err) {
-    console.log(err);
-    console.log('db error');
+  var connection;
+  var db_config = {
+    contactPoints: ['127.0.0.1'],
+    keyspace: 'tweets'
+  };
+  connection = new cassandra.Client(db_config);
+  connection.connect(function (err, result) {
+    console.log('cassandra connected');
   });
 
-  db.once('open', function () {
-    console.log('db open');
-  });
-
-  process.on('SIGINT', function () {
-    db.close(function () {
-      console.log('Mongoose connection disconnected app termination.');
-      process.exit(0);
-    });
-  });
-
-  mongoose.connect(process.env.MONGODB_URI);
-};
+}
 
 module.exports = initialize();
+

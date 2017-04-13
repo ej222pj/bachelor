@@ -4,7 +4,6 @@ var Twitter = require('twitter');
 var oboe = require('oboe');
 const tweet = require('../model/DAL/tweetHandler.js');
 const config = require('../config');
-const Tweetdb = require('../model/DAL/Schemas/tweet.js');
 
 
 var router = express.Router();
@@ -38,10 +37,10 @@ router.get('/', function (req, res, next) {
     });
     //}*/
 
-     tweet.findTen().then(function (tweets) {
-         //let numberOfTweets = tweets.length + " stycken! Det räcker nu va!";
-         res.send(tweets);
-     });
+    tweet.findTen().then(function (tweets) {
+        //let numberOfTweets = tweets.length + " stycken! Det räcker nu va!";
+        res.send(tweets[0].tweet.created_at);
+    });
 
 
 });

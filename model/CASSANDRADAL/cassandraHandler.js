@@ -1,6 +1,6 @@
 'use strict';
 
-const Tweet = require(__dirname + '/Schemas/tweet.js');
+const Tweet = require(__dirname + '/Schemas/cassandra.js');
 
 const add = (tweet) => new Tweet({ tweet }).save();
 const findAll = () => Tweet.find({}).exec();
